@@ -88,6 +88,11 @@
     entries.forEach((e, i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('shown'), i * 90); so.unobserve(e.target); } });
   }, { threshold: 0.2 });
   $$('.story figure').forEach(f => so.observe(f));
+  { // fallback: reveal any figure that is in the viewport, checked on scroll (rAF-throttled)
+    let t = false;
+    const chk = () => { for (const f of $$('.story figure:not(.shown)')) { const r = f.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) f.classList.add('shown'); } t = false; };
+    addEventListener('scroll', () => { if (!t) { t = true; requestAnimationFrame(chk); } }, { passive: true }); setTimeout(chk, 800);
+  }
 
   /* ---------- Counters ---------- */
   const fmt = (n, d) => n.toLocaleString(undefined, { maximumFractionDigits: d, minimumFractionDigits: d });
