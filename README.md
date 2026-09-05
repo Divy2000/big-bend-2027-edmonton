@@ -1,6 +1,6 @@
 # Big Bend 2027 — Edmonton edition
 
-A single-page trip site for our friend in Edmonton: a four-day, three-night Big Bend National Park camping and dark-sky road trip from Dallas on February 12–15, 2027 (Presidents’ Day / Alberta Family Day weekend). Costs in CAD (with an adjustable exchange-rate assumption), with YEG–DFW flight logistics and the Alberta / U.S. holiday alignment worked out.
+A single-page trip site for our friend in Edmonton: a four-day, three-night Big Bend National Park camping and dark-sky road trip from Dallas on December 24–27, 2027 (Christmas weekend — a new moon, the darkest three nights of the year). Costs in CAD (with an adjustable exchange-rate assumption), with YEG–DFW flight logistics and the Alberta / U.S. holiday alignment worked out.
 
 Companion site for the same trip, for J in Arizona: `big-bend-2027-arizona`.
 
