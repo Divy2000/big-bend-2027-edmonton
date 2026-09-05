@@ -127,10 +127,9 @@
     svg.innerHTML = `
       <defs><radialGradient id="mg${Math.random().toString(36).slice(2, 7)}" cx="45%" cy="40%"><stop offset="0" stop-color="#f4f1ea"/><stop offset="1" stop-color="#b9bfc9"/></radialGradient></defs>
       <circle cx="${cx}" cy="${cy}" r="${R}" fill="#0c1220" stroke="rgba(255,255,255,.12)"/>
-      <path d="${d}" fill="#d9dee6" class="moon-lit" style="opacity:${reduce ? 1 : 0};transition:opacity 1.2s ease .2s"/>`;
+      <path d="${d}" fill="#d9dee6" class="moon-lit${reduce ? ' on' : ''}"/>`;
     void sideSign;
-    const ob = new IntersectionObserver(([e]) => { if (e.isIntersecting) { svg.querySelector('.moon-lit').style.opacity = 1; ob.disconnect(); } }, { threshold: 0.5 });
-    ob.observe(svg);
+
   });
 
   /* ---------- Itinerary route progress (scroll-linked) ---------- */
@@ -202,4 +201,67 @@
   addEventListener('scroll', () => { if (!tick) { tick = true; requestAnimationFrame(draw); } }, { passive: true });
   addEventListener('resize', draw, { passive: true });
   draw();
+})();
+
+/* ---------- Motion pass ---------- */
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* scroll progress */
+  const bar = document.querySelector('.progress i');
+  if (bar && !reduce) {
+    let t = false;
+    const upd = () => { const h = document.documentElement; const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1); bar.style.transform = `scaleX(${p})`; t = false; };
+    addEventListener('scroll', () => { if (!t) { t = true; requestAnimationFrame(upd); } }, { passive: true }); upd();
+  }
+  /* moon fill via class (lets CSS stagger the three) */
+  document.querySelectorAll('svg[data-moon]').forEach(svg => {
+    const lit = svg.querySelector('.moon-lit'); if (!lit) return; lit.style.transition = ''; lit.style.opacity = '';
+    new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { lit.classList.add('on'); o.disconnect(); } }, { threshold: .5 }).observe(svg);
+  });
+  /* itinerary: car marker follows the drawn route */
+  const route = document.querySelector('.route');
+  if (route && !reduce) {
+    const car = document.createElement('div'); car.className = 'car'; car.setAttribute('aria-hidden', 'true'); route.appendChild(car);
+    let t = false;
+    const upd = () => { const r = route.getBoundingClientRect(); const seen = Math.min(r.height - 8, Math.max(0, innerHeight * 0.7 - r.top)); car.style.transform = `translateY(${seen}px)`; t = false; };
+    addEventListener('scroll', () => { if (!t) { t = true; requestAnimationFrame(upd); } }, { passive: true }); upd();
+  }
+  /* map: a dot drives Dallas → Big Bend as the route draws */
+  const rt = document.getElementById('rt');
+  if (rt && !reduce && typeof rt.getTotalLength === 'function') {
+    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    dot.setAttribute('r', '7'); dot.setAttribute('fill', 'var(--amber)'); dot.setAttribute('class', 'map-dot'); dot.style.opacity = '0';
+    rt.parentNode.insertBefore(dot, rt.nextSibling);
+    const L = rt.getTotalLength();
+    new IntersectionObserver((es, o) => {
+      if (!es[0].isIntersecting) return; o.disconnect();
+      const start = performance.now(), dur = 2400, delay = 200;
+      const step = now => {
+        const k = Math.max(0, Math.min(1, (now - start - delay) / dur)), e = 1 - Math.pow(1 - k, 3);
+        const p = rt.getPointAtLength(L * e); dot.setAttribute('cx', p.x); dot.setAttribute('cy', p.y); dot.style.opacity = k > 0 ? '1' : '0';
+        if (k < 1) requestAnimationFrame(step);
+      }; requestAnimationFrame(step);
+    }, { threshold: .4 }).observe(rt.closest('section'));
+  }
+  /* hero: occasional shooting star on the existing starfield */
+  const cv = document.getElementById('stars');
+  if (cv && !reduce) {
+    const ctx = cv.getContext('2d'); if (!ctx) return;
+    const shoot = () => {
+      const w = cv.clientWidth, h = cv.clientHeight, dpr = Math.min(devicePixelRatio || 1, 2);
+      const x0 = Math.random() * w * 0.8 + w * 0.1, y0 = Math.random() * h * 0.35, len = 90 + Math.random() * 140, ang = Math.PI * (0.15 + Math.random() * 0.2);
+      const t0 = performance.now(), dur = 650;
+      const frame = now => {
+        const k = (now - t0) / dur; if (k > 1) return;
+        const x = x0 + Math.cos(ang) * len * k, y = y0 + Math.sin(ang) * len * k;
+        ctx.save(); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const g = ctx.createLinearGradient(x - Math.cos(ang) * 40, y - Math.sin(ang) * 40, x, y);
+        g.addColorStop(0, 'rgba(243,238,229,0)'); g.addColorStop(1, `rgba(243,238,229,${0.9 * (1 - k)})`);
+        ctx.strokeStyle = g; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(x - Math.cos(ang) * 40, y - Math.sin(ang) * 40); ctx.lineTo(x, y); ctx.stroke(); ctx.restore();
+        requestAnimationFrame(frame);
+      }; requestAnimationFrame(frame);
+    };
+    let vis = true; new IntersectionObserver(([e]) => { vis = e.isIntersecting; }).observe(cv);
+    const loop = () => { if (vis) shoot(); setTimeout(loop, 3500 + Math.random() * 6000); }; setTimeout(loop, 1800);
+  }
 })();
