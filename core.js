@@ -64,15 +64,17 @@
   const layers = $$('[data-depth]');
   if (layers.length && !reduce) {
     let ticking = false;
+    let mx = 0, my = 0;
     const onScroll = () => {
       if (ticking) return; ticking = true;
       requestAnimationFrame(() => {
         const y = Math.min(scrollY, innerHeight);
-        for (const el of layers) el.style.transform = `translate3d(0,${y * parseFloat(el.dataset.depth)}px,0)`;
+        for (const el of layers) { const d = parseFloat(el.dataset.depth); el.style.transform = `translate3d(${(mx * d * 60).toFixed(1)}px,${(y * d + my * d * 30).toFixed(1)}px,0)`; }
         ticking = false;
       });
     };
     addEventListener('scroll', onScroll, { passive: true });
+    if (matchMedia('(hover:hover) and (pointer:fine)').matches) addEventListener('pointermove', e => { mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; onScroll(); }, { passive: true });
   }
 
   /* ---------- Section reveals + meters ---------- */
@@ -106,30 +108,26 @@
   }, { threshold: 0.6 });
   $$('[data-count]').forEach(el => co.observe(el));
 
-  /* ---------- Moon renderer: illumination % + waxing/waning ---------- */
-  // Draws a disc with a terminator; k in [0,1]; waxing lights the right side (northern hemisphere).
+  /* ---------- Moon renderer: sweeps from full to the real phase ---------- */
+  const moonPath = (k, waxing) => {
+    const R = 40, cx = 50, cy = 50, lit = k >= 0.5, rx = Math.abs(Math.cos(Math.PI * k)) * R, so = waxing ? 1 : 0;
+    return `M ${cx} ${cy - R} A ${R} ${R} 0 0 ${so} ${cx} ${cy + R} A ${rx} ${R} 0 0 ${lit ? so : 1 - so} ${cx} ${cy - R} Z`;
+  };
   $$('svg[data-moon]').forEach(svg => {
-    const k = Math.max(0, Math.min(1, parseFloat(svg.dataset.moon) / 100));
-    const waxing = svg.dataset.phase !== 'waning';
-    const R = 40, cx = 50, cy = 50;
-    // terminator as an ellipse whose x-radius depends on phase
-    const lit = k >= 0.5;
-    const rx = Math.abs(Math.cos(Math.PI * k)) * R;
-    const sideSign = waxing ? 1 : -1;
-    // Build path: outer half-disc on lit side + terminator ellipse arc
-    const sweepOuter = waxing ? 1 : 0;
-    const d = [
-      `M ${cx} ${cy - R}`,
-      `A ${R} ${R} 0 0 ${sweepOuter} ${cx} ${cy + R}`,
-      `A ${rx} ${R} 0 0 ${lit ? sweepOuter : 1 - sweepOuter} ${cx} ${cy - R} Z`
-    ].join(' ');
+    const target = Math.max(0, Math.min(1, parseFloat(svg.dataset.moon) / 100)), waxing = svg.dataset.phase !== 'waning';
     svg.setAttribute('viewBox', '0 0 100 100');
-    svg.innerHTML = `
-      <defs><radialGradient id="mg${Math.random().toString(36).slice(2, 7)}" cx="45%" cy="40%"><stop offset="0" stop-color="#f4f1ea"/><stop offset="1" stop-color="#b9bfc9"/></radialGradient></defs>
-      <circle cx="${cx}" cy="${cy}" r="${R}" fill="#0c1220" stroke="rgba(255,255,255,.12)"/>
-      <path d="${d}" fill="#d9dee6" class="moon-lit${reduce ? ' on' : ''}"/>`;
-    void sideSign;
-
+    svg.innerHTML = `<circle cx="50" cy="50" r="40" fill="#0c1220" stroke="rgba(255,255,255,.12)"/><path class="moon-lit on" fill="#d9dee6" d="${moonPath(reduce ? target : 1, waxing)}" style="opacity:${reduce ? 1 : 0}"/>`;
+    if (reduce) return;
+    const lit = svg.querySelector('.moon-lit');
+    new IntersectionObserver((es, o) => {
+      if (!es[0].isIntersecting) return; o.disconnect();
+      const t0 = performance.now(), dur = 1600, delay = [...svg.parentNode.parentNode.children].indexOf(svg.parentNode) * 260;
+      const step = now => {
+        const q = Math.max(0, Math.min(1, (now - t0 - delay) / dur)), e = 1 - Math.pow(1 - q, 3);
+        lit.style.opacity = Math.min(1, q * 4); lit.setAttribute('d', moonPath(1 - (1 - target) * e, waxing));
+        if (q < 1) requestAnimationFrame(step);
+      }; requestAnimationFrame(step);
+    }, { threshold: .5 }).observe(svg);
   });
 
   /* ---------- Itinerary route progress (scroll-linked) ---------- */
@@ -213,11 +211,6 @@
     const upd = () => { const h = document.documentElement; const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1); bar.style.transform = `scaleX(${p})`; t = false; };
     addEventListener('scroll', () => { if (!t) { t = true; requestAnimationFrame(upd); } }, { passive: true }); upd();
   }
-  /* moon fill via class (lets CSS stagger the three) */
-  document.querySelectorAll('svg[data-moon]').forEach(svg => {
-    const lit = svg.querySelector('.moon-lit'); if (!lit) return; lit.style.transition = ''; lit.style.opacity = '';
-    new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { lit.classList.add('on'); o.disconnect(); } }, { threshold: .5 }).observe(svg);
-  });
   /* itinerary: car marker follows the drawn route */
   const route = document.querySelector('.route');
   if (route && !reduce) {

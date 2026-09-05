@@ -64,7 +64,7 @@
     }
 
     // 3. Stars: magnitude distribution (lots faint, few bright), denser in the band, subtle colour
-    const N = Math.min(2600, Math.floor((D * D) / 1500));
+    const N = Math.min(3400, Math.floor((D * D) / 1200));
     twinklers = [];
     for (let i = 0; i < N; i++) {
       let x, y;
@@ -117,6 +117,26 @@
       }
     }
     ctx.restore(); ctx.globalAlpha = 1;
+    // Milky Way brightens toward the middle of the night (mid-page)
+    const bell = Math.exp(-Math.pow((k - 0.5) / 0.28, 2));
+    if (bell > 0.02) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.28 * bell; ctx.translate(W / 2, H / 2 - lift); ctx.rotate(rot); ctx.drawImage(sky, -D / 2, -D / 2, D, D); ctx.restore(); ctx.globalAlpha = 1; }
+    // Dusk at the top of the page, pre-dawn at the bottom
+    const dusk = Math.max(0, 1 - k * 4), dawn = Math.max(0, (k - 0.78) / 0.22);
+    if (dusk > 0) { const g = ctx.createLinearGradient(0, H * 0.45, 0, H); g.addColorStop(0, 'rgba(120,70,30,0)'); g.addColorStop(1, `rgba(150,85,35,${0.42 * dusk})`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+    if (dawn > 0) { const g = ctx.createLinearGradient(0, H * 0.35, 0, H); g.addColorStop(0, 'rgba(70,110,170,0)'); g.addColorStop(1, `rgba(90,130,190,${0.38 * dawn})`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+    // Persistent horizon: two ridges fade in once the hero scrolls away, parallax against each other
+    const ridge = Math.min(1, Math.max(0, (k - 0.045) * 14));
+    if (ridge > 0) {
+      const base = H * 0.86 + (1 - ridge) * 40;
+      ctx.globalAlpha = ridge;
+      ctx.fillStyle = '#0a1120'; ctx.beginPath(); ctx.moveTo(0, base + 30 - k * 10);
+      for (let i = 0; i <= 14; i++) { const x = (W / 14) * i; ctx.lineTo(x, base + 30 - k * 10 - Math.abs(Math.sin(i * 1.9 + 0.7)) * H * 0.07 - Math.sin(i * 0.8) * H * 0.02); }
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#04070e'; ctx.beginPath(); ctx.moveTo(0, base + 58 - k * 26);
+      for (let i = 0; i <= 10; i++) { const x = (W / 10) * i; ctx.lineTo(x, base + 58 - k * 26 - Math.abs(Math.sin(i * 2.3 + 2.1)) * H * 0.05); }
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
     // meteors, screen space
     if (!reduce) {
       if (now - last > 4000 + Math.random() * 7000 && meteors.length < 2) {

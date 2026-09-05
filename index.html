@@ -161,13 +161,41 @@
         <figure role="listitem"><svg data-moon="25" data-phase="waxing" aria-label="Moon about 25 percent illuminated, waxing crescent"></svg><figcaption><b>Sat, Jan 1</b>~25% · sets ≈ 10 pm</figcaption></figure>
         <figure role="listitem"><svg data-moon="35" data-phase="waxing" aria-label="Moon about 35 percent illuminated, waxing crescent"></svg><figcaption><b>Sun, Jan 2</b>~35% · sets ≈ 11 pm</figcaption></figure>
       </div>
+<figure class="constellation" aria-label="Orion, the constellation that owns the winter sky here, drawn star by star">
+        <svg viewBox="0 0 420 320" role="img">
+          <g class="cl"><line x1="120" y1="60" x2="300" y2="70"/><line x1="120" y1="60" x2="170" y2="160"/><line x1="300" y1="70" x2="250" y2="160"/><line x1="170" y1="160" x2="210" y2="165"/><line x1="210" y1="165" x2="250" y2="160"/><line x1="170" y1="160" x2="140" y2="270"/><line x1="250" y1="160" x2="290" y2="262"/><line x1="140" y1="270" x2="290" y2="262"/><line x1="210" y1="165" x2="212" y2="215"/></g>
+          <g class="cs"><circle cx="120" cy="60" r="5" style="fill:#f3c9a0"/><circle cx="300" cy="70" r="3.6"/><circle cx="170" cy="160" r="3.4"/><circle cx="210" cy="165" r="3.4"/><circle cx="250" cy="160" r="3.4"/><circle cx="140" cy="270" r="3.6"/><circle cx="290" cy="262" r="5.4" style="fill:#c9d8ff"/><circle cx="212" cy="215" r="2.2" style="fill:#e9a53d"/></g>
+          <g class="ct"><text x="132" y="52">Betelgeuse</text><text x="308" y="62">Bellatrix</text><text x="150" y="190">the Belt</text><text x="224" y="222">Orion Nebula</text><text x="300" y="282">Rigel</text><text x="92" y="292">Saiph</text></g>
+        </svg>
+        <figcaption>Orion clears the mountains around 10 pm and owns the sky until dawn. The fuzzy patch below the belt is a nebula — a place where stars are being born — and you can see it without binoculars from here.</figcaption>
+      </figure>
       <p class="fine">Moon times are approximate for Big Bend. Want to see the exact sky for any night? <a href="https://stellarium-web.org/" rel="noopener" target="_blank">Stellarium</a> is free and runs in the browser.</p>
     </div>
-    <div class="sky-note">
-      <div><h3>Dusk</h3><p>Sunset around 5:55. The sky goes deep blue, then Jupiter shows up first, then the bright stars, then everything.</p></div>
-      <div><h3>8 pm</h3><p>Fully dark. The winter Milky Way runs overhead — softer than the summer version in photos, but plainly visible to the naked eye from here.</p></div>
-      <div><h3>10 pm</h3><p>Orion clears the mountains. The Pleiades are straight up. If you’ve brought binoculars, this is when you use them.</p></div>
-      <div><h3>Any time</h3><p>Look for a shooting star — a sky this dark shows a handful an hour even with no meteor shower on. <a href="https://www.nps.gov/bibe/planyourvisit/stargazing.htm" rel="noopener" target="_blank">The park’s own stargazing page</a> has more.</p></div>
+    <div>
+      <figure class="nightline" aria-label="Timeline of one night: sunset 5:55 pm, full dark 7:20 pm, Orion up 10 pm, moon only after 4:45 am on Christmas weekend, first light 6:15 am, sunrise 7:45 am">
+        <svg viewBox="0 0 720 210" role="img">
+          <defs><linearGradient id="nl" x1="0" x2="1"><stop offset="0" stop-color="#7a4a1c"/><stop offset=".16" stop-color="#0b1220"/><stop offset=".84" stop-color="#0b1220"/><stop offset="1" stop-color="#2b4a7a"/></linearGradient></defs>
+          <rect class="nl-bar" x="40" y="70" width="640" height="14" rx="7" fill="url(#nl)"/>
+          <rect class="nl-dark" x="140" y="70" width="428" height="14" rx="7" fill="#02040a"/>
+          <g class="nl-ticks" fill="var(--muted)" font-size="11" text-anchor="middle">
+            <text x="80" y="58">5:55 pm</text><text x="80" y="108">sunset</text>
+            <text x="140" y="58">7:20</text><text x="140" y="108">fully dark</text>
+            <text x="253" y="58">10 pm</text><text x="253" y="108">Orion up</text>
+            <text x="500" y="58">4:45 am</text><text x="500" y="108">moon rises</text>
+            <text x="568" y="58">6:15</text><text x="568" y="108">first light</text>
+            <text x="640" y="58">7:45 am</text><text x="640" y="108">sunrise</text>
+          </g>
+          <!-- Christmas: moon absent all night; sliver at 4:45 -->
+          <g class="nl-row" transform="translate(0,0)">
+            <text x="40" y="150" fill="var(--amber)" font-size="12">Christmas</text><rect class="nl-dark2" x="140" y="158" width="360" height="8" rx="4" fill="#02040a"/><path class="nl-moon" d="M508 162 a6 6 0 1 0 0 0.01" fill="none" stroke="var(--moon)" stroke-width="1.6"/><text x="520" y="166" fill="var(--muted)" font-size="11">no moon until dawn</text>
+          </g>
+          <g class="nl-row" transform="translate(0,30)">
+            <text x="40" y="150" fill="var(--amber)" font-size="12">New Year’s</text><rect x="80" y="158" width="130" height="8" rx="4" fill="#3a4a66" class="nl-lit"/><rect class="nl-dark2" x="210" y="158" width="358" height="8" rx="4" fill="#02040a"/><text x="222" y="152" fill="var(--muted)" font-size="11">crescent sets 9–11 pm, then dark</text>
+          </g>
+          <circle class="nl-now" cx="40" cy="77" r="6" fill="var(--amber)"/>
+        </svg>
+        <figcaption>One night, start to finish. The black stretch is when the sky is at its darkest — on Christmas weekend that is the entire night; on New Year’s the crescent lingers a couple of hours after sunset, then it’s the same sky.</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -371,7 +399,7 @@
           <circle cx="300" cy="150" r="5" fill="#f3eee5"/><text x="312" y="146">Midland / Odessa</text><text x="312" y="166" fill="#8d8a83" font-size="12">fuel + lunch, 11:00 am</text>
           <circle cx="205" cy="220" r="5" fill="#f3eee5"/><text x="218" y="216">Fort Stockton</text>
           <circle cx="196" cy="282" r="5" fill="#f3eee5"/><text x="210" y="288">Marathon</text><text x="210" y="306" fill="#8d8a83" font-size="12">last gas before the park</text>
-          <circle cx="170" cy="350" r="7" fill="#e9a53d"/><text x="184" y="346">Chisos Basin, Big Bend NP</text><text x="184" y="366" fill="#8d8a83" font-size="12">arrive ≈ 3:30 pm</text>
+          <circle class="camp-pulse" cx="170" cy="350" r="7"/><circle cx="170" cy="350" r="7" fill="#e9a53d"/><text x="184" y="346">Chisos Basin, Big Bend NP</text><text x="184" y="366" fill="#8d8a83" font-size="12">arrive ≈ 3:30 pm</text>
         </g>
         <text x="20" y="400" fill="#8d8a83" font-family="Instrument Sans, system-ui, sans-serif" font-size="12">Schematic, not to scale. I-20 west, then US-385 south.</text>
       </svg>

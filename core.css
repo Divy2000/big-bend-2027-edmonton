@@ -396,3 +396,48 @@ footer{background:linear-gradient(180deg,transparent,rgba(4,6,11,.8))}
 .datetable td{color:var(--ink-soft)} .datetable td b{color:var(--ink)}
 .datetable tr:nth-child(6) td,.datetable tr:nth-child(7) td{color:var(--ink)}
 @media(max-width:26em){.datetable{font-size:.84rem}.datetable tbody th{width:5.2rem;white-space:normal}}
+
+/* ---------- Immersive pass ---------- */
+/* cinematic opening */
+#skycanvas{opacity:0;transition:opacity 2.2s ease}
+.hero-enter #skycanvas{opacity:1}
+.hero .scene{opacity:0;transform:translateY(46px)}
+.hero-enter .hero .scene{animation:rise 1.8s cubic-bezier(.2,.7,.2,1) .5s forwards}
+.hero-enter .copy>*:nth-child(1){animation-delay:1.1s}.hero-enter .copy>*:nth-child(2){animation-delay:1.3s}.hero-enter .copy>*:nth-child(3){animation-delay:1.5s}.hero-enter .copy>*:nth-child(4){animation-delay:1.7s}.hero-enter .copy>*:nth-child(5){animation-delay:1.9s}.hero-enter .copy>*:nth-child(6){animation-delay:2.1s}.hero-enter .copy>*:nth-child(7){animation-delay:2.3s}
+.hero-enter .seals{animation-delay:1.9s}
+.hero-photo{opacity:0;transition:opacity 2.6s ease .3s}
+.hero-enter .hero-photo{opacity:1}
+/* constellation */
+.constellation{margin:1.4rem 0 0;max-width:34rem}
+.constellation svg{width:100%;height:auto;display:block}
+.constellation .cl line{stroke:var(--moon);stroke-opacity:.45;stroke-width:1;stroke-dasharray:240;stroke-dashoffset:240;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.7,.2,1)}
+.constellation .cl line:nth-child(2){transition-delay:.15s}.constellation .cl line:nth-child(3){transition-delay:.3s}.constellation .cl line:nth-child(4){transition-delay:.45s}.constellation .cl line:nth-child(5){transition-delay:.55s}.constellation .cl line:nth-child(6){transition-delay:.7s}.constellation .cl line:nth-child(7){transition-delay:.85s}.constellation .cl line:nth-child(8){transition-delay:1s}.constellation .cl line:nth-child(9){transition-delay:1.15s}
+.constellation .cs circle{fill:var(--ink);opacity:0;transform:scale(.3);transform-box:fill-box;transform-origin:center;transition:opacity .6s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.constellation .cs circle:nth-child(2){transition-delay:.1s}.constellation .cs circle:nth-child(3){transition-delay:.2s}.constellation .cs circle:nth-child(4){transition-delay:.3s}.constellation .cs circle:nth-child(5){transition-delay:.4s}.constellation .cs circle:nth-child(6){transition-delay:.5s}.constellation .cs circle:nth-child(7){transition-delay:.6s}.constellation .cs circle:nth-child(8){transition-delay:.9s}
+.constellation .ct text{fill:var(--muted);font-family:var(--body);font-size:11px;opacity:0;transition:opacity .8s ease 1.8s}
+.in-view .constellation .cl line{stroke-dashoffset:0}
+.in-view .constellation .cs circle{opacity:1;transform:scale(1)}
+.in-view .constellation .ct text{opacity:1}
+.constellation figcaption{color:var(--ink-soft);font-size:.92rem;margin-top:.6rem;max-width:34rem}
+/* campsite pulse on the map */
+.camp-pulse{transform-box:fill-box;transform-origin:center;animation:campPulse 2.6s ease-out infinite;fill:var(--amber);opacity:.5}
+@keyframes campPulse{0%{transform:scale(1);opacity:.55}100%{transform:scale(3.2);opacity:0}}
+@media (prefers-reduced-motion:reduce){
+  #skycanvas,.hero-photo{opacity:1;transition:none}
+  .hero .scene{opacity:1;transform:none;animation:none}
+  .constellation .cl line{stroke-dashoffset:0;transition:none}.constellation .cs circle{opacity:1;transform:none;transition:none}.constellation .ct text{opacity:1;transition:none}
+  .camp-pulse{animation:none;opacity:0}
+}
+
+/* night timeline */
+.nightline{margin:1.4rem 0 0;max-width:40rem}
+.nightline svg{width:100%;height:auto;display:block}
+.nightline .nl-dark,.nightline .nl-dark2{transform-box:fill-box;transform-origin:left center;transform:scaleX(0);transition:transform 1.8s cubic-bezier(.2,.7,.2,1) .3s}
+.nightline .nl-lit{transform-box:fill-box;transform-origin:left center;transform:scaleX(0);transition:transform 1.2s cubic-bezier(.2,.7,.2,1) .2s}
+.nightline .nl-now{transition:transform 2.6s cubic-bezier(.2,.7,.2,1) .2s;transform:translateX(0)}
+.nightline .nl-ticks text,.nightline .nl-row text,.nightline .nl-moon{opacity:0;transition:opacity .8s ease 1.4s}
+.in-view .nightline .nl-dark,.in-view .nightline .nl-dark2,.in-view .nightline .nl-lit{transform:scaleX(1)}
+.in-view .nightline .nl-now{transform:translateX(600px)}
+.in-view .nightline .nl-ticks text,.in-view .nightline .nl-row text,.in-view .nightline .nl-moon{opacity:1}
+.nightline figcaption{color:var(--ink-soft);font-size:.92rem;margin-top:.6rem;max-width:36rem}
+@media (prefers-reduced-motion:reduce){.nightline .nl-dark,.nightline .nl-dark2,.nightline .nl-lit{transform:none;transition:none}.nightline .nl-now{transform:translateX(600px);transition:none}.nightline .nl-ticks text,.nightline .nl-row text,.nightline .nl-moon{opacity:1;transition:none}}
