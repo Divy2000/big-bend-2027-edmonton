@@ -375,3 +375,13 @@ section{background:transparent}
 .ledger details[open]{background:linear-gradient(180deg,rgba(6,9,16,.35),transparent)}
 footer{background:linear-gradient(180deg,transparent,rgba(4,6,11,.8))}
 .stick .cta{white-space:nowrap}
+
+/* verified distinctions — the seal */
+.seals{list-style:none;padding:0;margin:0 0 1.6rem;display:grid;gap:.6rem;max-width:34rem}
+@media(min-width:48em){.seals{grid-template-columns:1fr 1fr;gap:.8rem}}
+.seals li{display:grid;grid-template-columns:1.4rem 1fr;gap:.6rem;align-items:start;padding:.7rem .9rem;border:1px solid var(--amber);border-radius:12px;background:rgba(233,165,61,.07)}
+.seals svg{width:1.3rem;height:1.3rem;fill:var(--amber);margin-top:.1rem}
+.seals b{display:block;color:var(--ink);font-weight:600;font-size:.92rem;line-height:1.25}
+.seals small{display:block;color:var(--ink-soft);font-size:.74rem;line-height:1.35;margin-top:.15rem}
+.hero-enter .seals{opacity:0;animation:rise 1.3s cubic-bezier(.2,.7,.2,1) .9s forwards}
+@media (prefers-reduced-motion:reduce){.hero-enter .seals{opacity:1;animation:none}}
