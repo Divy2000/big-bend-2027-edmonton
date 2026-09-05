@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-build="202609051010-53f603b7">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Big Bend 2027 — Khush, the darkest three nights of the year</title>
 <meta name="description" content="December 24–27, 2027: a new moon over Big Bend National Park on Christmas weekend. A camping and dark-sky road trip from Dallas, budgeted in CAD, with Edmonton flight logistics and the Alberta / U.S. holiday math worked out.">
@@ -19,10 +20,32 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,500;12..96,75..100,600&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
-<link rel="stylesheet" href="core.css">
-<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="core.css?v=202609051010-53f603b7">
+<link rel="stylesheet" href="theme.css?v=202609051010-53f603b7">
 </head>
 <body>
+<script>
+(function(){
+  var build=document.documentElement.getAttribute('data-build');
+  if(!build)return;
+  // Fresh copy loaded via a cache-busting reload: tidy the URL.
+  if(location.search.indexOf('_r=')>-1){try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}}
+  var checking=false;
+  function check(){
+    if(checking||document.visibilityState==='hidden')return;checking=true;
+    fetch('version.json?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){
+      checking=false;if(!j||!j.v||j.v===build)return;
+      // Only try once per server version so a slow CDN can't cause a reload loop.
+      var key='bb-reloaded-to';try{if(sessionStorage.getItem(key)===j.v)return;sessionStorage.setItem(key,j.v)}catch(e){}
+      location.replace(location.pathname+'?_r='+encodeURIComponent(j.v)+location.hash);
+    }).catch(function(){checking=false});
+  }
+  addEventListener('load',function(){setTimeout(check,1500)});
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')check()});
+  addEventListener('pageshow',function(e){if(e.persisted)check()});
+  setInterval(check,5*60*1000);
+})();
+</script>
 <canvas id="skycanvas" aria-hidden="true"></canvas>
 <div class="sky-vignette" aria-hidden="true"></div>
 <div class="progress" aria-hidden="true"><i></i></div>
@@ -483,7 +506,7 @@
 
 <div class="stick" role="complementary" aria-label="Trip summary"><div class="txt"><b>Christmas or New Year’s · about <span data-usd="1195">C$1,650</span></b><span>Three nights in the Basin, YEG → DFW</span></div><a class="cta" href="#join">I’m in</a></div>
 
-<script src="sky.js" defer></script>
-<script src="core.js" defer></script>
+<script src="sky.js?v=202609051010-53f603b7" defer></script>
+<script src="core.js?v=202609051010-53f603b7" defer></script>
 </body>
 </html>
