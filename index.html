@@ -22,6 +22,8 @@
 <link rel="stylesheet" href="theme.css">
 </head>
 <body>
+<canvas id="skycanvas" aria-hidden="true"></canvas>
+<div class="sky-vignette" aria-hidden="true"></div>
 <div class="progress" aria-hidden="true"><i></i></div>
 <a class="skip" href="#verdict">Skip to the plan</a>
 
@@ -37,7 +39,6 @@
 <!-- 1. HERO -->
 <section class="hero" aria-labelledby="h1">
   <div class="hero-photo" data-parallax="0.18" aria-hidden="true"><img sizes="100vw" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Chisos_Mountains%2C_Big_Bend_National_Park.jpg/1920px-Chisos_Mountains%2C_Big_Bend_National_Park.jpg" srcset="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Chisos_Mountains%2C_Big_Bend_National_Park.jpg/1280px-Chisos_Mountains%2C_Big_Bend_National_Park.jpg 1280w, https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Chisos_Mountains%2C_Big_Bend_National_Park.jpg/1920px-Chisos_Mountains%2C_Big_Bend_National_Park.jpg 1920w" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.closest('.hero-photo').classList.add('noimg')"></div>
-  <div class="sky"><canvas id="stars" aria-hidden="true"></canvas></div>
   <div class="scene" aria-hidden="true">
     <svg viewBox="0 0 1440 620" preserveAspectRatio="xMidYMax slice">
       <defs>
@@ -454,6 +455,7 @@
 
 <div class="stick" role="complementary" aria-label="Trip summary"><div class="txt"><b>Dec 24–27, 2027 · about <span data-usd="1195">C$1,650</span></b><span>Christmas weekend, no moon, three nights in the Basin</span></div><a class="cta" href="#join">I’m in</a></div>
 
+<script src="sky.js" defer></script>
 <script src="core.js" defer></script>
 </body>
 </html>

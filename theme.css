@@ -18,7 +18,7 @@
   --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 h1,h2{font-variation-settings:"opsz" 96,"wdth" 90}
-.hero{background:linear-gradient(180deg,#03050a 0%,#0a1224 60%,#152033 100%)}
+.hero{background:transparent}
 .hero .copy{padding-bottom:clamp(2.5rem,6vw,5rem)}
 /* Calendar alignment device */
 .cal{display:grid;gap:.5rem;margin:1.2rem 0 1.8rem;max-width:34rem}
