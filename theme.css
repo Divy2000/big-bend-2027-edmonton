@@ -48,3 +48,6 @@ h1{font-size:clamp(2.4rem,1.1rem + 4.6vw,4.4rem)}
 .cal{margin:.6rem 0 1.2rem;gap:.35rem}
 .cal .join{margin-top:.5rem}
 .hero .kicker{margin-bottom:.8rem}
+
+.cal .d.maybe{border:1px dashed var(--amber);color:var(--amber);font-weight:600;background:rgba(224,160,74,.12)}
+.cal .d.hol{transform:none;opacity:1}
