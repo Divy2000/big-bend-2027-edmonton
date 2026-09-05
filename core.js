@@ -82,6 +82,11 @@
     for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); }
   }, { rootMargin: '0px 0px -12% 0px', threshold: 0.1 });
   $$('section, .reveal').forEach(el => io.observe(el));
+  { // fallback: any section whose box intersects the viewport becomes in-view, even during fast scrolls
+    let t = false;
+    const chk = () => { for (const el of $$('section:not(.in-view)')) { const r = el.getBoundingClientRect(); if (r.top < innerHeight * 0.9 && r.bottom > innerHeight * 0.1) el.classList.add('in-view'); } t = false; };
+    addEventListener('scroll', () => { if (!t) { t = true; requestAnimationFrame(chk); } }, { passive: true }); setTimeout(chk, 600); setInterval(chk, 500);
+  }
 
   /* ---------- Story panels: mask wipe ---------- */
   const so = new IntersectionObserver((entries) => {
@@ -231,15 +236,20 @@
     dot.setAttribute('r', '7'); dot.setAttribute('fill', 'var(--amber)'); dot.setAttribute('class', 'map-dot'); dot.style.opacity = '0';
     rt.parentNode.insertBefore(dot, rt.nextSibling);
     const L = rt.getTotalLength();
-    new IntersectionObserver((es, o) => {
-      if (!es[0].isIntersecting) return; o.disconnect();
+    let started = false;
+    const run = () => {
+      if (started) return; started = true;
       const start = performance.now(), dur = 2400, delay = 200;
       const step = now => {
         const k = Math.max(0, Math.min(1, (now - start - delay) / dur)), e = 1 - Math.pow(1 - k, 3);
         const p = rt.getPointAtLength(L * e); dot.setAttribute('cx', p.x); dot.setAttribute('cy', p.y); dot.style.opacity = k > 0 ? '1' : '0';
         if (k < 1) requestAnimationFrame(step);
       }; requestAnimationFrame(step);
-    }, { threshold: .4 }).observe(rt.closest('section'));
+    };
+    const sec = rt.closest('section');
+    new IntersectionObserver((es) => { if (es[0].isIntersecting) run(); }, { threshold: .2 }).observe(sec);
+    const tryRun = () => { if (!started) { const r = sec.getBoundingClientRect(); if (r.top < innerHeight * 0.9 && r.bottom > 0) run(); } };
+    addEventListener('scroll', tryRun, { passive: true }); const tm = setInterval(() => { tryRun(); if (started) clearInterval(tm); }, 500);
   }
   /* hero: occasional shooting star on the existing starfield */
   const cv = document.getElementById('stars');

@@ -51,3 +51,14 @@ h1{font-size:clamp(2.4rem,1.1rem + 4.6vw,4.4rem)}
 
 .cal .d.maybe{border:1px dashed var(--amber);color:var(--amber);font-weight:600;background:rgba(224,160,74,.12)}
 .cal .d.hol{transform:none;opacity:1}
+/* desktop hero must fit 900px with seals + calendar */
+@media(min-width:48em) and (max-height:960px){
+  .hero .copy{padding-top:5rem;padding-bottom:2.2rem}
+  .hero .kicker{margin-bottom:.5rem}
+  h1{font-size:clamp(2.2rem,1rem + 4vw,3.6rem)}
+  .hero h1{margin-bottom:.2rem}
+  .hero .date{margin:.2rem 0 .7rem;font-size:1.2rem}
+  .seals{margin-bottom:1rem;gap:.6rem}.seals li{padding:.5rem .7rem}.seals small{display:none}
+  .cal{margin:.4rem 0 .9rem}.cal .join{margin-top:.4rem;font-size:.8rem}
+  .hero .lede{margin-bottom:1.2rem;font-size:1.1rem}
+}
