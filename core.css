@@ -385,3 +385,14 @@ footer{background:linear-gradient(180deg,transparent,rgba(4,6,11,.8))}
 .seals small{display:block;color:var(--ink-soft);font-size:.74rem;line-height:1.35;margin-top:.15rem}
 .hero-enter .seals{opacity:0;animation:rise 1.3s cubic-bezier(.2,.7,.2,1) .9s forwards}
 @media (prefers-reduced-motion:reduce){.hero-enter .seals{opacity:1;animation:none}}
+
+/* one table for the two dates */
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:1.4rem;border:1px solid var(--line-strong);border-radius:14px;background:rgba(6,9,16,.6)}
+.datetable{width:100%;border-collapse:collapse;font-size:.92rem;min-width:22rem}
+.datetable th,.datetable td{padding:.75rem .8rem;vertical-align:top;text-align:left;border-top:1px solid var(--line)}
+.datetable thead th{border-top:none;font-family:var(--display);font-weight:500;font-size:1.15rem;color:var(--amber);letter-spacing:-.01em}
+.datetable thead th span{display:block;font-family:var(--body);font-size:.78rem;color:var(--muted);font-weight:400;margin-top:.15rem}
+.datetable tbody th{color:var(--muted);font-weight:500;font-size:.82rem;width:7rem;white-space:nowrap}
+.datetable td{color:var(--ink-soft)} .datetable td b{color:var(--ink)}
+.datetable tr:nth-child(6) td,.datetable tr:nth-child(7) td{color:var(--ink)}
+@media(max-width:26em){.datetable{font-size:.84rem}.datetable tbody th{width:5.2rem;white-space:normal}}
