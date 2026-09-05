@@ -278,3 +278,36 @@ footer p{max-width:none}
 .route-draw{transition:stroke-dashoffset 2.4s cubic-bezier(.2,.7,.2,1) .2s}
 .in-view .route-draw{stroke-dashoffset:0!important}
 @media (prefers-reduced-motion:reduce){.route-draw{stroke-dashoffset:0!important;transition:none}}
+
+/* ---------- Photographs (illustration kept underneath as fallback) ---------- */
+html{color-scheme:dark}
+.ph{position:relative;display:block;width:100%;height:100%;overflow:hidden;background:var(--navy)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.06);transition:transform 1.6s cubic-bezier(.2,.7,.2,1),opacity .8s ease}
+.ph .ph-fb{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.ph img{position:relative;z-index:1}
+.ph.noimg img{display:none}
+.shown .ph img,.ph.thumb img{transform:scale(1)}
+/* darken night frames so caption text stays legible */
+.ph.night::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,7,12,.15),rgba(5,7,12,.55));pointer-events:none}
+.story figure{background:var(--navy)}
+.story figcaption{background:linear-gradient(180deg,transparent,rgba(5,7,12,.92));padding-top:2.4rem}
+.story .cr{display:block;color:var(--muted);font-size:.74rem;margin-top:.15rem}
+.highlights .ph.thumb{width:5.5rem;height:5.5rem;border-radius:12px;flex:none}
+.highlights li{align-items:start}
+
+/* Hero photograph */
+.hero-photo{position:absolute;inset:-8% 0 0 0;z-index:0;overflow:hidden;will-change:transform}
+.hero-photo img{width:100%;height:116%;object-fit:cover;opacity:.42;filter:saturate(.85) contrast(1.05)}
+.hero-photo::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(5,7,12,.75) 0%,rgba(5,7,12,.35) 35%,rgba(5,7,12,.82) 78%,var(--night) 100%),
+  linear-gradient(90deg,rgba(5,7,12,.8) 0%,rgba(5,7,12,.15) 60%)}
+.hero-photo.noimg{display:none}
+.hero .sky{z-index:1}
+.hero .scene{z-index:2}
+.hero .copy{z-index:3}
+@media(max-width:48em){.hero-photo img{opacity:.36}}
+
+@media (prefers-reduced-motion:reduce){
+  .ph img{transform:none!important;transition:none}
+  .hero-photo{transform:none!important}
+}

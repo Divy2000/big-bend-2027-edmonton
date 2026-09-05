@@ -180,3 +180,26 @@
   /* ---------- Hero enter class after fonts settle ---------- */
   requestAnimationFrame(() => document.body.classList.add('hero-enter'));
 })();
+
+/* ---------- Photo parallax: transform-only, rAF-throttled ---------- */
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const items = [...document.querySelectorAll('[data-parallax]')];
+  if (!items.length) return;
+  const live = new Set();
+  const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? live.add(e.target) : live.delete(e.target)), { rootMargin: '20% 0px' });
+  items.forEach(el => io.observe(el));
+  let tick = false;
+  const draw = () => {
+    const vh = innerHeight;
+    for (const el of live) {
+      const r = el.getBoundingClientRect();
+      const mid = r.top + r.height / 2 - vh / 2;
+      el.style.transform = `translate3d(0,${(-mid * parseFloat(el.dataset.parallax)).toFixed(2)}px,0)`;
+    }
+    tick = false;
+  };
+  addEventListener('scroll', () => { if (!tick) { tick = true; requestAnimationFrame(draw); } }, { passive: true });
+  addEventListener('resize', draw, { passive: true });
+  draw();
+})();
