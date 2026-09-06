@@ -96,7 +96,8 @@
     const maxScroll = Math.max(1, doc.scrollHeight - innerHeight);
     const k = Math.min(1, Math.max(0, scrollY / maxScroll));
     // Sky rotation: 22° across the page, plus a slow real-time drift; slight parallax lift
-    const rot = reduce ? 0 : k * 0.38 + t * 0.0018;
+    // 40° of turn across the page, plus a drift of ~0.35°/s so the sky visibly wheels even when you stop
+    const rot = reduce ? 0 : k * 0.70 + t * 0.006;
     const lift = reduce ? 0 : k * H * 0.10;
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     ctx.fillStyle = '#04060b'; ctx.fillRect(0, 0, W, H);

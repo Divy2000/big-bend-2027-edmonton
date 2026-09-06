@@ -75,6 +75,10 @@
     };
     addEventListener('scroll', onScroll, { passive: true });
     if (matchMedia('(hover:hover) and (pointer:fine)').matches) addEventListener('pointermove', e => { mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; onScroll(); }, { passive: true });
+    else {
+      addEventListener('touchmove', e => { const p = e.touches[0]; if (p) { mx = p.clientX / innerWidth - 0.5; my = p.clientY / innerHeight - 0.5; onScroll(); } }, { passive: true });
+      if ('DeviceOrientationEvent' in window) addEventListener('deviceorientation', e => { if (e.gamma == null) return; mx = Math.max(-0.5, Math.min(0.5, e.gamma / 60)); my = Math.max(-0.5, Math.min(0.5, (e.beta - 45) / 90)); onScroll(); }, { passive: true });
+    }
   }
 
   /* ---------- Section reveals + meters ---------- */
@@ -183,6 +187,39 @@
     };
     fxIn.addEventListener('input', apply); apply();
   }
+
+  /* ---------- Scroll-linked rotation: Orion and the moons turn with the sky ---------- */
+  {
+    const rotEls = [...$$('.constellation svg .rot'), ...$$('svg[data-moon]')];
+    if (rotEls.length && !reduce) {
+      let t = false;
+      const upd = () => {
+        for (const el of rotEls) {
+          const r = el.getBoundingClientRect(); const c = r.top + r.height / 2;
+          const a = ((innerHeight / 2 - c) / innerHeight) * (el.classList.contains('rot') ? 16 : 10);
+          el.style.transform = `rotate(${a.toFixed(2)}deg)`;
+        }
+        t = false;
+      };
+      addEventListener('scroll', () => { if (!t) { t = true; requestAnimationFrame(upd); } }, { passive: true }); upd();
+    }
+  }
+
+  /* ---------- Touch parity: the element nearest the middle of the screen takes the hover look ---------- */
+  if (matchMedia('(hover: none)').matches && !reduce) {
+    const sel = '.opt, .story figure, .highlights li, .receipt, .risks li, .covered li, .seals li, .day, .faq details';
+    let t = false;
+    const upd = () => {
+      const mid = innerHeight / 2; let best = null, bd = Infinity;
+      for (const el of $$(sel)) { const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) { el.classList.remove('is-active'); continue; } const d = Math.abs(r.top + r.height / 2 - mid); if (d < bd) { bd = d; best = el; } el.classList.remove('is-active'); }
+      if (best && bd < innerHeight * 0.3) best.classList.add('is-active');
+      t = false;
+    };
+    addEventListener('scroll', () => { if (!t) { t = true; requestAnimationFrame(upd); } }, { passive: true }); setTimeout(upd, 900);
+  }
+
+  /* ---------- Scroll hint on every device, gone after the first scroll ---------- */
+  { const h = $('.scroll-hint'); if (h) addEventListener('scroll', () => { if (scrollY > 40) h.classList.add('gone'); }, { passive: true, once: false }); }
 
   /* ---------- Hero enter class after fonts settle ---------- */
   requestAnimationFrame(() => document.body.classList.add('hero-enter'));
